@@ -1,0 +1,35 @@
+#!/usr/bin/python
+#Created by bakey
+#Jan 2002
+#v1.0
+#Copy this file into /bin or /usr/bin
+#Add pyscponly to /etc/shells
+#Make this the default shell for scp clients
+
+import os,sys
+data = ''
+try:
+	u = os.environ['USER']
+except:
+	u = 'Unknown'
+try:
+	ip = os.environ['SSH_CLIENT']
+except:
+	ip = 'Unknown'
+while data != ['exit']:
+	data = raw_input('~# ').split(';')
+	for l1 in data:
+		if l1.strip() == 'ls':
+			os.system('ls')
+		elif l1.strip()[:4] == 'echo':
+			os.system(l1.strip())
+		elif l1.strip() == 'pwd':
+			os.system('pwd')
+		elif l1.strip()[:3] == 'scp':
+			open('/var/log/scp.log','a').write(u + ' - ' + ip + ' - ' + l1 + '\n')
+			os.system(l1.strip())
+		elif l1.strip()[:6] == 'groups':
+			os.system('groups')
+		elif l1.strip()[:6] == 'ls -la':
+			os.system('ls -la')
+sys.exit()
